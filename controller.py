@@ -166,13 +166,8 @@ def determineNewGathererPosition(grid, gatherer, resource):
 	#Eventually, will determine the closest resource of a list of resources
 	oldx = gatherer.position.x 
 	oldy = gatherer.position.y
-<<<<<<< HEAD
-	
-	#Handling X 
-=======
 	oldpoint = entities.Point(oldx, oldy) 
 
->>>>>>> Trail and Placement Modes
 	if resource.position.x > gatherer.position.x:    
 		gatherer.position.x += 1
 	elif resource.position.x < gatherer.position.x: 
