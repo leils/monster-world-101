@@ -1,0 +1,65 @@
+main 
+	SELF-EXPLANATORY 
+entities 
+	Classes: 
+		Point 
+			stores x, y
+		CSCStudent (gatherer)
+			stores name, resource limit, point, resource count 
+				//store resource that it's aimed at 
+		CampusMarket (generator)
+			stores name, rate of generation, position
+		MonsterEnergy (resource)
+			stores name, position
+	TO WRITE: 
+		Obstacle  
+
+model (this is the world model)
+	Grid Handling 
+		Class Grid (grid creation) (2-d list) 
+		set_cell 
+		get_cell 
+		resetGrid 
+		isValidPosition 
+	Entity Handling  
+		initialEntities
+		placeEntities 	
+		spawnResources			//messy yo 
+		returnCopiesOf	//rewrite to handle full list
+		updateEntities	//rewrite to handle full list 
+   
+
+view 
+	Functions: 
+		draw (drawing grid to world) 
+	TO WRITE: 
+		Handling window size 
+		Handling viewpoint 
+		Screen blit for all images 
+
+
+
+controller 
+	Input Handling 
+		Keyboard 
+			If pressed 1 
+			if pressed 2 
+			NEED TO WRITE: 
+				if pressed S  (save)
+				arrow keys (viewport)
+		Mouse 
+			lclick for spawn 
+			NEED TO WRITE: 	
+				rclick for remove entities 
+	Determine Entity Movement 
+		Update Entity Placement 
+			determineNewGatherePosition 
+			determineNearest 	//clean up 
+			determineFarthest 	//clean up 
+	TO WRITE: 
+	Save/Retrieval 
+		Save world to file 
+		Retrieve world from file 
+
+Do we want to create a new function that separates out the resources for processing? 
+e.g creates a new list, with references to ONLY the resources. 

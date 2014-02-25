@@ -1,0 +1,20 @@
+README
+
+World creation for CSC 101 
+by Leia Chang and Nathan Lemay 
+Winter Quarter 2014 
+
+Controls: 
+Viewport Movement - Arrow Keys 
+Gatherer placement mode - q
+Generator placement mode - w
+Resource placement mode - e 
+Obstacle placement mode - r
+Reset placement mode to neutral - t
+Place entity - left click 
+Remove entity - right click 
+Set CSCStudents to find nearest Monster Energy - 1 
+Set CSCStudents to find farthest Monster Energy - 2 
+Reset world - 0 
+Save world - s 
+Load saved world - l
