@@ -76,9 +76,9 @@ def main():
 				gatherer = grid.entityList[0]
 				grid.spacePressed = False
 			if keys[K_s]:
-				controller.save(grid)
+				controller.save(grid, bgGrid)
 			if keys[K_l]:
-				controller.load(grid)
+				controller.load(grid, bgGrid)
 			controller.handleHover(grid, x, y)
 			
 			controller.handleKeys(grid, keys, gatherer)
