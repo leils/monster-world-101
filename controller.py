@@ -211,9 +211,6 @@ def updateGatherers(grid):
 				gatherer.aim = determineFarthest(resList, gatherer) 
 
 
-
-
-
 '''-------------------------------------------------------------------------'''
 '''List Handling'''
 def returnCopiesOf(stuffList): 
@@ -255,7 +252,7 @@ def cleanUp(entlist):
 '''-------------------------------------------------------------------------'''
 '''Save and Load'''
 
-def save(grid):
+def save(grid, bgGrid):
 	entityList = grid.entityList
 	f = open('gaia.sav', 'w')
 	
@@ -266,12 +263,21 @@ def save(grid):
 			f.write('generator ' + str(entity.position.x) + ' ' + str(entity.position.y) + '\n')
 		elif isinstance(entity, entities.MonsterEnergy):
 			f.write('resource ' + str(entity.position.x) + ' ' + str(entity.position.y) + '\n')
+		elif isinstance(entity, entities.Obstacle):
+			f.write('obstacle ' + str(entity.position.x) + ' ' + str(entity.position.y) + '\n')
+
+	for x in range(0, bgGrid.width):
+		for y in range(0, bgGrid.height):
+			p = entities.Point(x, y)
+			if model.get_cell(bgGrid, p) == model.CONCRETE:
+				f.write('concrete ' + str(x) + ' ' + str(y) + '\n')
 
 	f.close()
 	print("You saved the file!")
 
-def load(grid):
-
+def load(grid, bgGrid):
+	model.emptyGrid(grid)
+	model.emptyGrid(bgGrid)
 	newList = []
 
 	with open('gaia.sav', 'r') as f:
@@ -296,6 +302,15 @@ def load(grid):
 				name = "MONSTER"
 				newEnt = entities.MonsterEnergy(name, p)
 				print('YOU FOUND A RESOURCE')
+
+			elif l[0] == 'obstacle':
+				p = entities.Point(int(l[1]), int(l[2]))
+				newEnt = entities.Obstacle(p)
+
+			elif l[0] == 'concrete':
+				p = entities.Point(int(l[1]), int(l[2]))
+				value = 6
+				model.set_cell(bgGrid, p, value)
 
 			newList.append(newEnt)
 		f.close()
