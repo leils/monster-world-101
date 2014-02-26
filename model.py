@@ -34,6 +34,7 @@ class Grid:
 		self.keyPressed = 0
 		self.spacePressed = False
 		self.placeMode = 0
+		self.mouseHover = None
 	
 		# initialize grid to all specified occupancy value
 		for row in range(0, self.height):
@@ -88,7 +89,7 @@ def initialEntities(grid):
 
 def placeEntities(grid): 
 	#Sets cells to value of gatherers
-	emptyGrid(grid)
+	#emptyGrid(grid)
 	for ent in grid.entityList: 
 		if isinstance(ent, entities.CSCStudent): 
 			set_cell(grid, ent.position, 1)

@@ -92,10 +92,12 @@ def handleLeftClicks(grid, keys, p, bgGrid):
 	elif grid.placeMode == model.OBSTACLE: 
 		newObs = entities.Obstacle(p)
 		grid.entityList.append(newObs)
+	#The following two only affect the bgGrid
 	elif grid.placeMode == model.EMPTY: 
 		model.set_cell(bgGrid, p, model.EMPTY)
 	elif grid.placeMode == model.CONCRETE: 
 		model.set_cell(bgGrid, p, model.CONCRETE)
+
 	else: 
 		newRes = resourceClick(grid, p, grid.entityList)
 		grid.entityList += newRes
@@ -107,8 +109,6 @@ def handleRightClicks(grid, point):
 			if samePt(entity.position, point):
 				grid.entityList.remove(entity)
 
-
-
 def resourceClick(grid, point, entityL): 
 	if model.get_cell(grid, point) == 3: 
 		print ("Clicked Resource at ", point.x, point.y) 
@@ -117,8 +117,6 @@ def resourceClick(grid, point, entityL):
 		print ("Did not click resource") 
 		return []
 
-
- 
 def clickToPoint(grid, x, y): #need to write to take in origin point 
 	#converts position of clicks to a point on the grid
 
@@ -128,6 +126,13 @@ def clickToPoint(grid, x, y): #need to write to take in origin point
 
 def samePt(p1, p2): 
 	return p1.x == p2.x and p1.y == p2.y
+
+def handleHover(grid, x, y): 
+	x = math.trunc(x / view.CELL_SIZE)
+	y = math.trunc(y / view.CELL_SIZE)
+	p = entities.Point(x, y)
+	grid.mouseHover = p
+
 
 '''-------------------------------------------------------------------------'''
 '''Entity Movement'''

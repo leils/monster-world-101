@@ -18,9 +18,11 @@ Background = None
 Concrete = None  
 Rock = None
 Trail = None
+greenBox = None
+redBox = None
 
 
-def loadSprites(): 
+def loadSprites(): #Will be rewritten to use Dictionaries instead of globals 
 	global resSprite
 	global genSprite
 	global gathSprite
@@ -28,6 +30,8 @@ def loadSprites():
 	global Concrete
 	global Rock
 	global Trail
+	global greenBox
+	global redBox
 	resSprite = pygame.image.load(os.path.join("Monster.png")).convert_alpha()
 	genSprite = pygame.image.load(os.path.join("Market.png")).convert_alpha()
 	gathSprite = pygame.image.load(os.path.join("CSCStudent.png")).convert_alpha()
@@ -35,6 +39,8 @@ def loadSprites():
 	Concrete = pygame.image.load(os.path.join("Concrete.png")).convert_alpha()
 	Rock = pygame.image.load(os.path.join("Rocks.png")).convert_alpha()
 	Trail = pygame.image.load(os.path.join("Trail.png")).convert_alpha()
+	greenBox = pygame.image.load(os.path.join("greenBox.png")).convert_alpha()
+	redBox = pygame.image.load(os.path.join("redBox.png")).convert_alpha()
 
 # draw the 2D grid
 # can edit to take in a list and determine the image that should be placed 
@@ -60,4 +66,12 @@ def draw(screen, grid, bgGrid, screenW, screenH): #originPoint, viewH viewW (IN 
 				screen.blit(Rock, (x * CELL_SIZE, y * CELL_SIZE))
 			elif value == 5: 
 				screen.blit(Trail, (x * CELL_SIZE, y * CELL_SIZE))
+	mPointx = grid.mouseHover.x + origin.x 
+	mPointy = grid.mouseHover.y + origin.y
+	mPoint = entities.Point(mPointx, mPointy)
+	hoverVal = model.get_cell(grid, mPoint)
+	if hoverVal == 0: 
+		screen.blit(greenBox, (grid.mouseHover.x  * CELL_SIZE, grid.mouseHover.y * CELL_SIZE))
+	else: 
+		screen.blit(redBox,  (grid.mouseHover.x  * CELL_SIZE, grid.mouseHover.y * CELL_SIZE))
 				

@@ -79,6 +79,7 @@ def main():
 				controller.save(grid)
 			if keys[K_l]:
 				controller.load(grid)
+			controller.handleHover(grid, x, y)
 			
 			controller.handleKeys(grid, keys, gatherer)
 
