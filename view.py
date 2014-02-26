@@ -11,6 +11,7 @@ DOES NO ACTUAL MODIFICATION TO THE WORLD, ONLY DRAWS
 '''
 # define cell size
 CELL_SIZE = 32
+WHITE = (255, 255, 255)
 resSprite = None 
 genSprite = None 
 gathSprite = None 
@@ -32,15 +33,24 @@ def loadSprites(): #Will be rewritten to use Dictionaries instead of globals
 	global Trail
 	global greenBox
 	global redBox
-	resSprite = pygame.image.load(os.path.join("Monster.png")).convert_alpha()
-	genSprite = pygame.image.load(os.path.join("Market.png")).convert_alpha()
-	gathSprite = pygame.image.load(os.path.join("CSCStudent.png")).convert_alpha()
-	Background = pygame.image.load(os.path.join("Background.jpg")).convert_alpha()
-	Concrete = pygame.image.load(os.path.join("Concrete.png")).convert_alpha()
-	Rock = pygame.image.load(os.path.join("Rocks.png")).convert_alpha()
-	Trail = pygame.image.load(os.path.join("Trail.png")).convert_alpha()
-	greenBox = pygame.image.load(os.path.join("greenBox.png")).convert_alpha()
-	redBox = pygame.image.load(os.path.join("redBox.png")).convert_alpha()
+	resSprite = pygame.image.load(os.path.join("Monster.bmp")).convert()
+	genSprite = pygame.image.load(os.path.join("Market.bmp")).convert()
+	gathSprite = pygame.image.load(os.path.join("CSCStudent.bmp")).convert()
+	Background = pygame.image.load(os.path.join("Background.bmp")).convert()
+	Concrete = pygame.image.load(os.path.join("Concrete.bmp")).convert()
+	Rock = pygame.image.load(os.path.join("Rocks.bmp")).convert()
+	Trail = pygame.image.load(os.path.join("Trail.bmp")).convert()
+	greenBox = pygame.image.load(os.path.join("greenBox.bmp")).convert()
+	redBox = pygame.image.load(os.path.join("redBox.bmp")).convert()
+	resSprite.set_colorkey(WHITE)
+	genSprite.set_colorkey(WHITE)
+	gathSprite.set_colorkey(WHITE)
+	Background.set_colorkey(WHITE)
+	Concrete.set_colorkey(WHITE)
+	Rock.set_colorkey(WHITE)
+	Trail.set_colorkey(WHITE)
+	greenBox.set_colorkey(WHITE)
+	redBox.set_colorkey(WHITE)
 
 # draw the 2D grid
 # can edit to take in a list and determine the image that should be placed 
