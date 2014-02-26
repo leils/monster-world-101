@@ -23,6 +23,7 @@ def main():
 
 	screen = pygame.display.set_mode((displayWidth, displayHeight))
 	grid = model.Grid(40, 40, model.EMPTY, 20, 20)
+	bgGrid = model.Grid(40, 40, model.EMPTY, 20, 20)
 
 	view.loadSprites()
 
@@ -63,14 +64,14 @@ def main():
 				pygame.quit()
 				sys.exit()
 			if mouse[0]: 
-				controller.handleLeftClicks(grid, keys, p)
+				controller.handleLeftClicks(grid, keys, p, bgGrid)
 			if mouse[2]:
 				controller.handleRightClicks(grid, p)
 
 			if keys[K_0]: 
 				grid.keyPressed = 0
 				print("Key pressed 0")
-				grid = model.resetGrid(resetCopy)
+				grid = model.resetGrid(resetCopy, bgGrid)
 				grid.entityList = controller.returnCopiesOf(resetCopy)
 				gatherer = grid.entityList[0]
 				grid.spacePressed = False
@@ -84,7 +85,7 @@ def main():
 		#controller.takeAction(grid, grid.spacePressed, grid.keyPressed, gatherer)
 		if grid.spacePressed: 
 			controller.updateGatherers(grid)
-		view.draw(screen, grid, grid.screenW, grid.screenH)
+		view.draw(screen, grid, bgGrid, grid.screenW, grid.screenH)
 
 		#view.handleSprites(screen, entityList)
 

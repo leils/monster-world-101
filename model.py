@@ -20,6 +20,7 @@ GENERATOR = 2
 RESOURCE = 3
 OBSTACLE = 4
 TRAIL = 5
+CONCRETE = 6
 
 class Grid:
 	def __init__(self, width, height, occupancy_value, screenW, screenH):
@@ -46,10 +47,11 @@ def set_cell(grid, point, value):
 def get_cell(grid, point):
 	return grid.cells[point.y][point.x]
 
-def resetGrid(entityList): #rewrite ??
+def resetGrid(entityList, bgGrid): #rewrite ??
 	grid1 = Grid(40, 40, EMPTY, 20, 20)
 	grid1.entityList = entityList
 	placeEntities(grid1)
+	emptyGrid(bgGrid)
 	return grid1
 
 def emptyGrid(grid): 
@@ -86,7 +88,7 @@ def initialEntities(grid):
 
 def placeEntities(grid): 
 	#Sets cells to value of gatherers
-	#emptyGrid(grid)
+	emptyGrid(grid)
 	for ent in grid.entityList: 
 		if isinstance(ent, entities.CSCStudent): 
 			set_cell(grid, ent.position, 1)

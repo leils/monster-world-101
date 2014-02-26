@@ -74,10 +74,12 @@ def handleKeys(grid, keys, gatherer):
 	if keys[K_r]: 
 		grid.placeMode = model.OBSTACLE
 	if keys[K_t]: 
-		grid.placeMode = 0
+		grid.placeMode = model.CONCRETE
+	if keys[K_y]: 
+		grid.placeMode = model.EMPTY
 
 
-def handleLeftClicks(grid, keys, p):
+def handleLeftClicks(grid, keys, p, bgGrid):
 	if grid.placeMode == model.GATHERER: 
 		newGath = entities.CSCStudent('John', 5, p)
 		grid.entityList.append(newGath)
@@ -90,6 +92,10 @@ def handleLeftClicks(grid, keys, p):
 	elif grid.placeMode == model.OBSTACLE: 
 		newObs = entities.Obstacle(p)
 		grid.entityList.append(newObs)
+	elif grid.placeMode == model.EMPTY: 
+		model.set_cell(bgGrid, p, model.EMPTY)
+	elif grid.placeMode == model.CONCRETE: 
+		model.set_cell(bgGrid, p, model.CONCRETE)
 	else: 
 		newRes = resourceClick(grid, p, grid.entityList)
 		grid.entityList += newRes
