@@ -10,7 +10,8 @@ Gatherer placement mode - q
 Generator placement mode - w
 Resource placement mode - e 
 Obstacle placement mode - r
-Reset placement mode to neutral - t
+Concrete placement mode - t 
+Grass tile placement mode - y
 Place entity - left click 
 Remove entity - right click 
 Set CSCStudents to find nearest Monster Energy - 1 

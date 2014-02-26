@@ -89,7 +89,7 @@ def initialEntities(grid):
 
 def placeEntities(grid): 
 	#Sets cells to value of gatherers
-	#emptyGrid(grid)
+	emptyGrid(grid)
 	for ent in grid.entityList: 
 		if isinstance(ent, entities.CSCStudent): 
 			set_cell(grid, ent.position, 1)
