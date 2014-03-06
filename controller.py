@@ -65,6 +65,7 @@ def handleKeys(grid, keys, gatherer):
 		if keys[K_RIGHT]: 
 			pass
 
+	'''----------Place Entity Mode-----------'''
 	if keys[K_q]: 
 		grid.placeMode = model.GATHERER
 	if keys[K_w]: 
@@ -81,13 +82,13 @@ def handleKeys(grid, keys, gatherer):
 
 def handleLeftClicks(grid, keys, p, bgGrid):
 	if grid.placeMode == model.GATHERER: 
-		newGath = entities.CSCStudent('John', 5, p)
+		newGath = entities.CSCStudent(5, p)
 		grid.entityList.append(newGath)
 	elif grid.placeMode == model.GENERATOR: 
-		newGen = entities.CampusMarket('campus', 4, p)
+		newGen = entities.CampusMarket(4, p)
 		grid.entityList.append(newGen)
 	elif grid.placeMode == model.RESOURCE: 
-		newRes = entities.MonsterEnergy('energy', p)
+		newRes = entities.MonsterEnergy(p)
 		grid.entityList.append(newRes)
 	elif grid.placeMode == model.OBSTACLE: 
 		newObs = entities.Obstacle(p)

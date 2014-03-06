@@ -79,8 +79,8 @@ def initialEntities(grid):
 	p2 = entities.Point(random.randrange(5, grid.width - 5), 
 		random.randrange(5, grid.height - 5)) 
 
-	gatherer = entities.CSCStudent("student1", 5, p1)  
-	generator = entities.CampusMarket("market1", .5, p2) 
+	gatherer = entities.CSCStudent(5, p1)  
+	generator = entities.CampusMarket(.5, p2) 
 	resourceList = spawnResources(grid, generator.position, [], 3, 3) 
 	entList = [gatherer, generator]
 	for ent in resourceList: 
@@ -106,7 +106,7 @@ def spawnResources(grid, centerPoint, resourceL, numRes, cellRange):
 	spawnedResources = [] 
 	occupiedList = [centerPoint] #list of currently filled positions
 	for resource in resourceL: 
-		occupiedList.append(entities.Point(resource.position.x, resource.position.y))
+		occupiedList.append(resource.position)
 		#is there a reason that I don't just put in the resource.position?
 	for x in range(0, numRes):
 		resPoint = centerPoint
@@ -142,7 +142,7 @@ def spawnResources(grid, centerPoint, resourceL, numRes, cellRange):
 			 loopAgain = False
 
 		occupiedList.append(resPoint)
-		spawnedResources.append(entities.MonsterEnergy("monster1", resPoint))       
+		spawnedResources.append(entities.MonsterEnergy(resPoint))       
 	return spawnedResources
 
 def getSurrounding(centerPoint, cellRange, grid): 
@@ -169,23 +169,9 @@ def updateEntities(grid, resourceList):
 	#Check that new positions are valid 
 		#If positions = not valid, revert to prior position
 	#Place entities 
-	'''
-	get list of all entities 
-	for gatherers, determine new position 
-		check if current aim exists. If does not, get a new aim. 
-		determine new position 
-	wipe grid 
-	place entities (all) 
-	'''
 
 	studentPosition = gatherer.position
-	'''
-	Wiping the grid, to be implimented later????
 
-	grid.set_cell(grid, gatherer.p, 0)
-	grid.set_cell(grid, generator.p, 0)
-	grid.set_cell(grid, resource.p, 0)
-	'''
 	for entity in grid.entityList: 
 		if isinstance(entity, entities.CSCStudent): 
 			originalPosition = entity.position

@@ -28,17 +28,6 @@ def main():
 	view.loadSprites()
 
 	grid.entityList = model.initialEntities(grid)
-	'''
-	tl = entities.Point(0, 0)
-	tr = entities.Point(0, 19)
-	bl = entities.Point(19, 0)
-	br = entities.Point(19, 19)
-	topLeft = entities.MonsterEnergy('me', tl)
-	topRight = entities.MonsterEnergy('me', tr)
-	bottomLeft = entities.MonsterEnergy('me', bl)
-	bottomRight = entities.MonsterEnergy('me', br)
-	grid.entityList = [topLeft, topRight, bottomLeft, bottomRight]
-	'''
 	model.placeEntities(grid)
 
 #must be placed elsewhere 

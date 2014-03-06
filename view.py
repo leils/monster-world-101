@@ -62,10 +62,21 @@ def draw(screen, grid, bgGrid, screenW, screenH): #originPoint, viewH viewW (IN 
 			value = model.get_cell(grid, p)
 			bgValue = model.get_cell(bgGrid, p)
 			#Background handling - concrete and grass
+
 			screen.blit(Background, (x * CELL_SIZE, y * CELL_SIZE))
+
 			if bgValue == 6: 
 				screen.blit(Concrete, (x * CELL_SIZE, y * CELL_SIZE))
 			#Entity handling
+			'''
+			Rewrite so that the grid holds Objects, only a 0 if empty
+			if isinstance(value, entities.Gatherer): 
+				if value.status = running: 
+					blit the running sprite 
+				elif value.status = consuming: 
+					blit the consuming sprite 
+			
+			'''
 			if value == 1: 
 				screen.blit(gathSprite, (x * CELL_SIZE, y * CELL_SIZE))
 			elif value == 2: 
