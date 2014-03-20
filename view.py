@@ -2,6 +2,7 @@ import pygame
 import os 
 import entities
 import model
+import controller
 #manages drawing to screen 
 
 '''
@@ -12,49 +13,45 @@ DOES NO ACTUAL MODIFICATION TO THE WORLD, ONLY DRAWS
 # define cell size
 CELL_SIZE = 32
 WHITE = (255, 255, 255)
-resSprite = None 
-genSprite = None 
-gathSprite = None 
-Background = None 
-Concrete = None  
-Rock = None
-Trail = None
-greenBox = None
-redBox = None
 
-
-def loadSprites(): #Will be rewritten to use Dictionaries instead of globals 
-	global resSprite
-	global genSprite
-	global gathSprite
-	global Background
-	global Concrete
-	global Rock
-	global Trail
-	global greenBox
-	global redBox
-	resSprite = pygame.image.load(os.path.join("Monster.bmp")).convert()
-	genSprite = pygame.image.load(os.path.join("Market.bmp")).convert()
-	gathSprite = pygame.image.load(os.path.join("CSCStudent.bmp")).convert()
-	Background = pygame.image.load(os.path.join("Background.bmp")).convert()
-	Concrete = pygame.image.load(os.path.join("Concrete.bmp")).convert()
-	Rock = pygame.image.load(os.path.join("Rocks.bmp")).convert()
-	Trail = pygame.image.load(os.path.join("Trail.bmp")).convert()
-	greenBox = pygame.image.load(os.path.join("greenBox.bmp")).convert()
-	redBox = pygame.image.load(os.path.join("redBox.bmp")).convert()
-	resSprite.set_colorkey(WHITE)
-	genSprite.set_colorkey(WHITE)
-	gathSprite.set_colorkey(WHITE)
-	Background.set_colorkey(WHITE)
-	Concrete.set_colorkey(WHITE)
-	Rock.set_colorkey(WHITE)
-	Trail.set_colorkey(WHITE)
-	greenBox.set_colorkey(WHITE)
-	redBox.set_colorkey(WHITE)
+def imgLoad(images): 
+	images.resSprite = pygame.image.load(os.path.join("Monster.bmp")).convert()
+	images.gathSprite = pygame.image.load(os.path.join("CSCStudent.bmp")).convert()
+	images.Background = pygame.image.load(os.path.join("Background.bmp")).convert()
+	images.Concrete = pygame.image.load(os.path.join("Concrete.bmp")).convert()
+	images.Rock = pygame.image.load(os.path.join("Rocks.bmp")).convert()
+	images.Trail = pygame.image.load(os.path.join("Trail.bmp")).convert()
+	images.greenBox = pygame.image.load(os.path.join("greenBox.bmp")).convert()
+	images.redBox = pygame.image.load(os.path.join("redBox.bmp")).convert()
+	images.T1 = pygame.image.load(os.path.join("T1.bmp")).convert()
+	images.T2 = pygame.image.load(os.path.join("T2.bmp")).convert()
+	images.C1 = pygame.image.load(os.path.join("consumeA1.bmp")).convert()
+	images.C2 = pygame.image.load(os.path.join("consumeA2.bmp")).convert()
+	images.M1 = pygame.image.load(os.path.join("Market.bmp")).convert()
+	images.M2 = pygame.image.load(os.path.join("Market2.bmp")).convert()
+	images.M3 = pygame.image.load(os.path.join("Market3.bmp")).convert()
+	images.resSprite.set_colorkey(WHITE)
+	images.gathSprite.set_colorkey(WHITE)
+	images.Background.set_colorkey(WHITE)
+	images.Concrete.set_colorkey(WHITE)
+	images.Rock.set_colorkey(WHITE)
+	images.Trail.set_colorkey(WHITE)
+	images.greenBox.set_colorkey(WHITE)
+	images.redBox.set_colorkey(WHITE)
+	images.T1.set_colorkey(WHITE)
+	images.T2.set_colorkey(WHITE)
+	images.C1.set_colorkey(WHITE)
+	images.C2.set_colorkey(WHITE)
+	images.M1.set_colorkey(WHITE)
+	images.M2.set_colorkey(WHITE)
+	images.M3.set_colorkey(WHITE)
+	images.transformList += [images.T1, images.T2]
+	images.consumeList += [images.C1, images.C2]
+	images.marketList += [images.M1, images.M2, images.M3, images.M2]
 
 # draw the 2D grid
 # can edit to take in a list and determine the image that should be placed 
-def draw(screen, grid, bgGrid, screenW, screenH): #originPoint, viewH viewW (IN GRIDS)
+def draw(img, screen, grid, bgGrid, screenW, screenH): #originPoint, viewH viewW (IN GRIDS)
 	origin = grid.origin
 	for y in range(0, screenH):
 		for x in range(0, screenW):
@@ -63,36 +60,43 @@ def draw(screen, grid, bgGrid, screenW, screenH): #originPoint, viewH viewW (IN 
 			bgValue = model.get_cell(bgGrid, p)
 			#Background handling - concrete and grass
 
-			screen.blit(Background, (x * CELL_SIZE, y * CELL_SIZE))
+			screen.blit(img.Background, (x * CELL_SIZE, y * CELL_SIZE))
 
-			if bgValue == 6: 
-				screen.blit(Concrete, (x * CELL_SIZE, y * CELL_SIZE))
+			if bgValue == model.CONCRETE: 
+				screen.blit(img.Concrete, (x * CELL_SIZE, y * CELL_SIZE))
 			#Entity handling
-			'''
-			Rewrite so that the grid holds Objects, only a 0 if empty
-			if isinstance(value, entities.Gatherer): 
-				if value.status = running: 
-					blit the running sprite 
-				elif value.status = consuming: 
-					blit the consuming sprite 
-			
-			'''
-			if value == 1: 
-				screen.blit(gathSprite, (x * CELL_SIZE, y * CELL_SIZE))
-			elif value == 2: 
-				screen.blit(genSprite, (x * CELL_SIZE, y * CELL_SIZE))
-			elif value == 3: 
-				screen.blit(resSprite, (x * CELL_SIZE, y * CELL_SIZE))
-			elif value == 4: 
-				screen.blit(Rock, (x * CELL_SIZE, y * CELL_SIZE))
-			elif value == 5: 
-				screen.blit(Trail, (x * CELL_SIZE, y * CELL_SIZE))
+
+			if value == model.GATHERER: 
+				g = grid.entityList[controller.findEntity(grid.entityList, p)]
+				if g.move: 
+					screen.blit(img.gathSprite, (x * CELL_SIZE, y * CELL_SIZE))
+				else: 
+					screen.blit(img.consumeList[g.animationLoop], (x * CELL_SIZE, y * CELL_SIZE))
+
+
+
+			elif value == model.GENERATOR: 
+				g = grid.entityList[controller.findEntity(grid.entityList, p)]
+				screen.blit(img.marketList[g.times], (x * CELL_SIZE, y * CELL_SIZE))
+			elif value == model.RESOURCE: 
+				screen.blit(img.resSprite, (x * CELL_SIZE, y * CELL_SIZE))
+			elif value == model.OBSTACLE: 
+				screen.blit(img.Rock, (x * CELL_SIZE, y * CELL_SIZE))
+			elif value == model.TRAIL: 
+				screen.blit(img.Trail, (x * CELL_SIZE, y * CELL_SIZE))
+			elif value == model.TRANSFORM: 
+				g = grid.entityList[controller.findEntity(grid.entityList, p)]
+				screen.blit(img.transformList[g.times - 1], (x * CELL_SIZE, y * CELL_SIZE))
+				#if click-drag is used to place these, and then tried to transform, 
+				#get error 
+
+
 	mPointx = grid.mouseHover.x + origin.x 
 	mPointy = grid.mouseHover.y + origin.y
 	mPoint = entities.Point(mPointx, mPointy)
 	hoverVal = model.get_cell(grid, mPoint)
-	if hoverVal == 0: 
-		screen.blit(greenBox, (grid.mouseHover.x  * CELL_SIZE, grid.mouseHover.y * CELL_SIZE))
+	if hoverVal == model.EMPTY: 
+		screen.blit(img.greenBox, (grid.mouseHover.x  * CELL_SIZE, grid.mouseHover.y * CELL_SIZE))
 	else: 
-		screen.blit(redBox,  (grid.mouseHover.x  * CELL_SIZE, grid.mouseHover.y * CELL_SIZE))
+		screen.blit(img.redBox,  (grid.mouseHover.x  * CELL_SIZE, grid.mouseHover.y * CELL_SIZE))
 				

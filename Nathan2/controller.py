@@ -24,8 +24,8 @@ def handleKeys(grid, keys, gatherer):
 		gathList = listOfGatherers(grid.entityList)
 		for gatherer in gathList: 
 			gatherer.aim = determineNearest(grid.entityList, gatherer)
-			setDirYandX(gatherer, gatherer.aim)
 		grid.spacePressed = False
+		print (gatherer.aim)
 
 	elif keys[K_2]: 
 		grid.keyPressed = 2
@@ -33,8 +33,8 @@ def handleKeys(grid, keys, gatherer):
 		gathList = listOfGatherers(grid.entityList)
 		for gatherer in gathList: 
 			gatherer.aim = determineFarthest(grid.entityList, gatherer)
-			setDirYandX(gatherer, gatherer.aim)
 		grid.spacePressed = False
+		print (gatherer.aim)
 
 	if keys[K_SPACE]: 
 		print ("Key pressed Space") 
@@ -59,8 +59,11 @@ def handleKeys(grid, keys, gatherer):
 	elif keys[K_UP]: 
 		if (grid.origin.y > 0): 
 			grid.origin.y -= 1
-		else: print("Can't move anymore") 
-		
+		else: print("Can't move anymore")
+
+	if keys[K_LSHIFT]: 
+		if keys[K_RIGHT]: 
+			pass
 
 	'''----------Place Entity Mode-----------'''
 	if keys[K_q]: 
@@ -77,33 +80,17 @@ def handleKeys(grid, keys, gatherer):
 		grid.placeMode = model.EMPTY
 
 
-def handleLeftClicks(actionList, grid, keys, p, bgGrid):
-	if keys[K_LSHIFT]: 
-		#new function below, pass grid, p, actionlist) 
-		e = findEntity(grid.entityList, p)
-		if not e: 
-			return 
-
-		if isinstance(grid.entityList[e], entities.MonsterEnergy): 
-			grid.entityList.pop(e)
-			t = entities.transformingMonster(p)
-			grid.entityList.append(t)
-			actionList.insert(t, 0)
-
-	elif grid.placeMode == model.GATHERER: 
-		removePrevInCell(grid, p)
+def handleLeftClicks(grid, keys, p, bgGrid):
+	if grid.placeMode == model.GATHERER: 
 		newGath = entities.CSCStudent(5, p)
 		grid.entityList.append(newGath)
 	elif grid.placeMode == model.GENERATOR: 
-		removePrevInCell(grid, p)
 		newGen = entities.CampusMarket(4, p)
 		grid.entityList.append(newGen)
 	elif grid.placeMode == model.RESOURCE: 
-		removePrevInCell(grid, p)
 		newRes = entities.MonsterEnergy(p)
 		grid.entityList.append(newRes)
 	elif grid.placeMode == model.OBSTACLE: 
-		removePrevInCell(grid, p)
 		newObs = entities.Obstacle(p)
 		grid.entityList.append(newObs)
 	#The following two only affect the bgGrid
@@ -115,24 +102,6 @@ def handleLeftClicks(actionList, grid, keys, p, bgGrid):
 	else: 
 		newRes = resourceClick(grid, p, grid.entityList)
 		grid.entityList += newRes
-
-	print (grid.entityList)
-
-def removePrevInCell(grid, p):
-	if not model.get_cell(grid, p) == 0: 
-		a = findEntity(grid.entityList, p)
-		grid.entityList.pop(a)
-
-def setDirYandX(gat, res): 
-	if gat.position.y < res.position.y: 
-		gat.diry = 1 
-	else: 
-		gat.diry = -1
-
-	if gat.position.x < res.position.x: 
-		gat.dirx = 1
-	else: 
-		gat.dirx = -1
 
 def handleRightClicks(grid, point):
 	if not model.get_cell(grid, point) == 0: 
@@ -204,107 +173,44 @@ def distance(p1, p2):
 	dist = math.sqrt((p1.x - p2.x)**2 + (p1.y - p2.y)**2)
 	return dist
 
-def determineNewGathererPosition(grid, gat, res):
+def determineNewGathererPosition(grid, gatherer, resource):
 	#Determines position one grixel toward the CLOSEST resource in both the x and y axis
 	#Eventually, will determine the closest resource of a list of resources
+	oldx = gatherer.position.x 
+	oldy = gatherer.position.y
+	oldpoint = entities.Point(oldx, oldy) 
 
+	if resource.position.x > gatherer.position.x:    
+		gatherer.position.x += 1
+	elif resource.position.x < gatherer.position.x: 
+		gatherer.position.x -= 1
+	if model.get_cell(grid, gatherer.position) == 4: 
+		gatherer.position.x = oldx
+		
+	#Handling Y 
+	if resource.position.y > gatherer.position.y: 
+		gatherer.position.y += 1
+	elif resource.position.y < gatherer.position.y: 
+		gatherer.position.y -= 1
+	if model.get_cell(grid, gatherer.position) == 4: 
+		gatherer.position.y = oldy
 
-	newGathP = entities.Point(gat.position.x, gat.position.y)
-	diry = gat.diry
-	dirx = gat.dirx
-
-	if not isinstance(res, entities.MonsterEnergy): 
-		return
-	
-
-	if not (gat.position.x == res.position.x) and not gat.priY: 
-		direction = res.position.x - gat.position.x
-		unitDir = int(direction / abs(direction)) #will be either +1 or -1
-		newGathP.x += unitDir
-		cellVal = model.get_cell(grid, newGathP)
-		if not canMove(cellVal):
-			newGathP.x -= unitDir
-			newGathP.y += diry
-			cellVal = model.get_cell(grid, newGathP) 
-			if not canMove(cellVal): 
-				newGathP.y -= 2 * diry
-				cellVal = model.get_cell(grid, newGathP) 
-				if not canMove(cellVal): 
-					newGathP.y -= diry
-					newGathP.x -= unitDir
-					gat.priY = True
-
-	elif not gat.position.y == res.position.y or gat.priY: 
-		direction = res.position.y - gat.position.y
-		if direction == 0: direction = 1
-		unitDir = int(direction / abs(direction) )
-		newGathP.y += unitDir
-		gat.priY = False
-		cellVal = model.get_cell(grid, newGathP)
-		if not canMove(cellVal): 
-			newGathP.y -= unitDir 
-			newGathP.x += dirx
-			gat.priY = True
-			cellVal = model.get_cell(grid, newGathP)
-			if not canMove(cellVal): 
-				newGathP.x -= 2 * dirx
-				cellVal = model.get_cell(grid, newGathP)
-				if not canMove(cellVal): 
-					newGathP.x -= dirx
-					newGathP.y -= unitDir
-					gat.priY = False
-
-	gat.position = newGathP
-
-def canMove(cellVal): 
-	return (cellVal == model.EMPTY or cellVal == model.RESOURCE)
+	if not samePt(gatherer.position, oldpoint): 
+		model.set_cell(grid, oldpoint, 5)
 
 def updateGatherers(grid): 
 	resList = listOfResources(grid.entityList)
 	gathList = listOfGatherers(grid.entityList) 
 
-	for gatherer in gathList:
-		if gatherer.move == True: 
-			if isinstance(gatherer.aim, entities.MonsterEnergy): 
-				pass
-				if not (model.get_cell(grid, gatherer.aim.position) == model.RESOURCE): 
-					gatherer.aim = None
-			else: 
-				if len(resList) < 1: 
-					gatherer.aim = None
-				elif gatherer.direction == entities.NEAR: 
-					gatherer.aim = determineNearest(resList, gatherer)
-				elif gatherer.direction == entities.FAR: 
-					gatherer.aim = determineFarthest(resList, gatherer) 
-			
-			if not gatherer.aim == None: 
-				setDirYandX(gatherer, gatherer.aim)
+	for gatherer in gathList: 
+		if gatherer.aim: 
+			determineNewGathererPosition(grid, gatherer, gatherer.aim)
+		else: 
+			if gatherer.direction == entities.NEAR: 
+				gatherer.aim = determineNearest(resList, gatherer)
+			if gatherer.direction == entities.FAR: 
+				gatherer.aim = determineFarthest(resList, gatherer) 
 
-def ensureMovement(grid, actionList): 
-	for ent in grid.entityList:
-		if isinstance(ent, entities.CSCStudent): 
-			if ent.registered == False: 
-				actionList.insert(ent, ent.rate)
-				ent.registered = True
-		if isinstance(ent, entities.CampusMarket): 
-			if ent.registered == False: 
-				actionList.insert(ent, ent.rate)
-				ent.registered = True
-
-
-
-
-'''-------------------------------------------------------------------------'''
-'''Animation'''
-def transform(grid, point): 
-	'''register an action for transforming
-	t = entities.transformingMonster(point)
-	grid.entitiesList.append(t)
-	action_list.insert(t, 0) #will be immediate 
-	''' 
-	for entity in grid.entityList: 
-		if samePt(entity.position, point): 
-			grid.entityList.pop(entity)
 
 '''-------------------------------------------------------------------------'''
 '''List Handling'''
@@ -343,73 +249,21 @@ def cleanUp(entlist):
 				if (not a == b and isinstance(b, entities.MonsterEnergy) 
 					and samePt(a.position, b.position)): 
 					entlist.remove(b)
-					a.aim = None
-					a.move = False
 
-def findEntity(entlist, p): #returns a position 
-	for a in entlist: 
-		if samePt(a.position, p): 
-			return entlist.index(a)
-	return None
-
-'''-------------------------------------------------------------------------'''
-'''Tick Handling'''
 def initializeActions(actionList, entityList): 
 	for entity in entityList: 
 		if isinstance(entity, entities.CSCStudent): 
 			actionList.insert(entity, entity.rate)
-			entity.registered = True
-		elif isinstance(entity, entities.CampusMarket): 
-			actionList.insert(entity, entity.rate)
-			entity.registered = True
 
-def handleTicks(grid, actionList, ticks): 
-	#the whole action thing
+def handleTicks(grid, actionList, ticks):
 	while not actionList.empty() and actionList.head().ord < ticks:
+		
 		action = actionList.pop()
 
-		if isinstance(action.item, entities.CSCStudent): 
-			if action.item.move: 
-				determineNewGathererPosition(grid, action.item, action.item.aim)
-				rescheduleItem(actionList, ticks, action.item, action.item.rate)
-			else: 
-				gatherAnimation(actionList, action.item, ticks)
+		if isinstance(action.item, entities.CSCStudent):
+			print("Handled a CSC tick")
+			determineNewGathererPosition(grid, action.item, action.item.aim)
+			rescheduleItem(actionList, ticks, action.item)
 
-		if isinstance(action.item, entities.transformingMonster):
-			if action.item.times == 0: 
-				action.item.times += 1
-				rescheduleItem(actionList, ticks, action.item, action.item.rate)
-			elif action.item.times == 1: 
-				action.item.times += 1
-				rescheduleItem(actionList, ticks, action.item, action.item.rate)
-			elif action.item.times >= 2: 
-				r = entities.Obstacle(action.item.position)
-				grid.entityList.append(r)
-				i = grid.entityList.index(action.item)
-				grid.entityList.pop(i)
-
-		if isinstance(action.item, entities.CampusMarket): 
-			if action.item.times < 3: 
-				action.item.times += 1
-			else: 
-				action.item.times = 0 
-			rescheduleItem(actionList, ticks, action.item, action.item.rate)
-
-
-def rescheduleItem(actionList, ticks, item, rate): 
-	actionList.insert(item, ticks + rate)
-
-def gatherAnimation(actionList, gat, ticks): 
-	if gat.animationTimes < 20: 
-		if gat.animationLoop == 0: 
-			gat.animationLoop = 1
-			rescheduleItem(actionList, ticks, gat, 10)
-		else: 
-			gat.animationLoop = 0
-			gat.animationTimes += 1
-			rescheduleItem(actionList, ticks, gat, 10)
-	else: 
-		gat.animationTimes = 0
-		gat.move = True
-		rescheduleItem(actionList, ticks, gat, gat.rate)
-		
+def rescheduleItem(actionList, ticks, item): 
+	actionList.insert(item, ticks + item.rate)

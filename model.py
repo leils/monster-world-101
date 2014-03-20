@@ -21,6 +21,7 @@ RESOURCE = 3
 OBSTACLE = 4
 TRAIL = 5
 CONCRETE = 6
+TRANSFORM = 7
 
 class Grid:
 	def __init__(self, width, height, occupancy_value, screenW, screenH):
@@ -30,7 +31,7 @@ class Grid:
 		self.screenW = screenW
 		self.screenH = screenH
 		self.origin = entities.Point(0,0)
-		self.entityList = []
+		self.entityList = []	#so this should really be a dictionary. 
 		self.keyPressed = 0
 		self.spacePressed = False
 		self.placeMode = 0
@@ -92,13 +93,15 @@ def placeEntities(grid):
 	emptyGrid(grid)
 	for ent in grid.entityList: 
 		if isinstance(ent, entities.CSCStudent): 
-			set_cell(grid, ent.position, 1)
+			set_cell(grid, ent.position, GATHERER)
 		elif isinstance(ent, entities.CampusMarket): 
-			set_cell(grid, ent.position, 2)
+			set_cell(grid, ent.position, GENERATOR)
 		elif isinstance(ent, entities.MonsterEnergy): 
-			set_cell(grid, ent.position, 3)
+			set_cell(grid, ent.position, RESOURCE)
 		elif isinstance(ent, entities.Obstacle): 
-			set_cell(grid, ent.position, 4)
+			set_cell(grid, ent.position, OBSTACLE)
+		elif isinstance(ent, entities.transformingMonster): 
+			set_cell(grid, ent.position, TRANSFORM)
 	
 
 def spawnResources(grid, centerPoint, resourceL, numRes, cellRange): 
@@ -160,22 +163,3 @@ def getSurrounding(centerPoint, cellRange, grid):
 			getCells.append(get_cell(grid, entities.Point(x, y)))
 
 	return getCells
-
-#rewrite me 
-def updateEntities(grid, resourceList): 
-	#Get & store current positions of gatherer (the entitiy we're moving)
-	#Reset current grid to 0 - implimented later 
-	#Reassign positions of entities 
-	#Check that new positions are valid 
-		#If positions = not valid, revert to prior position
-	#Place entities 
-
-	studentPosition = gatherer.position
-
-	for entity in grid.entityList: 
-		if isinstance(entity, entities.CSCStudent): 
-			originalPosition = entity.position
-			determineNewGathererPosition(entity, resourceList[0]) #changeme
-			if not isValidPosition(grid, entity.position): 
-				entity.position = originalPosition
-	placeEntities(grid, gatherer, generator, resourceList)

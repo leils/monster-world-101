@@ -19,3 +19,16 @@ Set CSCStudents to find farthest Monster Energy - 2
 Reset world - 0 
 Save world - s 
 Load saved world - l
+
+Transformation: Monster Energy turns into a Rock Obstacle when holding shift and left-clicking it. 
+Animation of CSCStudent: CSCStudent glows when MonsterEnergy is collected. 
+Animation of Campus Market: Campus Market consistently opens and closes door. 
+
+Movement: 
+Gatherer prioritizes x-direction movement. 
+
+X-Direction first: 
+Gatherer first moves in the x-direction of the resource. If it cannot, it attempts to move in the y-direction of the resource. If impossible, will move in the opposite y-direction, and if that too is impossible, the opposite x-direction. 
+
+Y-Direction first: (if gatherer is in the same x-coordinate as the resource, or if the previous movement around an obstacle require that the y-direction have priority)
+Gatherer attempts y in direction of resource, then x in direction, then x in opposite, and finally y in opposite. 

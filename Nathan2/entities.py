@@ -5,7 +5,6 @@ import random
 NEAR = 0
 FAR = 1
 
-
 class Point():
 	def __init__(self, a, b): 
 		self.x = a
@@ -14,31 +13,31 @@ class Point():
 class CSCStudent():  
 	def __init__(self, r, p):
 
+		#pygame.sprite.Sprite.__init__(self)
+		#self.image = pygame.image.load(os.path.join("Ash.png")).convert()
+
 		self.resource_limit = r
 		self.position = p
 		self.resource_count = 0
-		self.image = None
 		self.aim = None 
-		self.rate = random.randint(200, 2000) #change to parameter. Set when initialized
+		self.rate = random.randint(1000, 3000)
 		self.direction = NEAR
-		self.priY = False
-		self.dirx = None
-		self.diry = None
-		self.registered = False
-		self.move = True
-		self.animationLoop = 0 #0 or 1 for blink animation
-		self.animationTimes = 0 #0-10
-		 
+
 class CampusMarket(): 
 	def __init__(self, r, p):
 
-		self.rate = 200
-		self.position = p
-		self.times = 0
-		self.registered = False
+		#pygame.sprite.Sprite.__init__(self)
+		#self.image = pygame.image.load(os.path.join("House.png")).convert()
 
+		self.rate = r
+		self.position = p
+
+#pygame.sprite.Sprite
 class MonsterEnergy(): 
 	def __init__(self, p):
+
+		#pygame.sprite.Sprite.__init__(self)
+		#self.image = pygame.image.load(os.path.join("Ball.png")).convert()
 
 		self.position = p
 		self.delayTime = 2000
@@ -46,36 +45,6 @@ class MonsterEnergy():
 class Obstacle(): 
 	def __init__(self, p): 
 		self.position = p
-
-class transformingMonster(): 
-	def __init__(self, p): 
-		self.position = p
-		self.times = 0
-		self.rate = 200
-		#will blit an image of exploding 
-		#after delayTime, switches to different exploding 
-		#after 2 images blitted, turns into an obstacle (rock) 
-
-class Images(): 
-	def __init__(self): 
-		self.resSprite = None
-		self.gathSprite = None 
-		self.Background = None 
-		self.Concrete = None  
-		self.Rock = None
-		self.Trail = None
-		self.greenBox = None
-		self.redBox = None
-		self.T1 = None
-		self.T2 = None
-		self.C1 = None
-		self.C2 = None
-		self.M1 = None
-		self.M2 = None
-		self.M3 = None
-		self.transformList = []
-		self.consumeList = []
-		self.marketList = []
 
 #Ordered list for actions.
 class OrderedList():
